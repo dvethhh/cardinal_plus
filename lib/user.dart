@@ -6,8 +6,13 @@ class User {
 
 class UserData {
   final String name;
-  final String courseYear;
   final String studentNumber;
+  final String email;
 
-  UserData({this.name, this.courseYear, this.studentNumber});
+  UserData({this.name, this.studentNumber, this.email});
+}
+
+class StudentNumber {
+    final String studentNumber;
+    StudentNumber({this.studentNumber});
 }

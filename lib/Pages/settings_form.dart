@@ -10,10 +10,6 @@ class _SettingsFormState extends State<SettingsForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> rating = ['1', '2', '3', '4', '5'];
 
-
-
-  double _rating = 1;
-
   @override
   Widget build(BuildContext context) {
     return Form(

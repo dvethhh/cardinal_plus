@@ -1,7 +1,6 @@
-import 'package:cardinal_plus/services/database.dart';
 import 'package:cardinal_plus/user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthService {
   UserData userData;
@@ -24,7 +23,7 @@ class AuthService {
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
-          email: email.trim(), password: password);
+          email: email, password: password);
       FirebaseUser user = result.user;
       return user;
     } catch (error) {
@@ -39,9 +38,6 @@ class AuthService {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
-      await DatabaseService(uid: user.uid)
-          .updateUserData('Please Update Information', '00000000', 'IT/3');
-
       return _userFromFirebaseUser(user);
     } catch (error) {
       print(error.toString());
@@ -50,16 +46,7 @@ class AuthService {
   }
 
 //Check if Student Number is Valid
-  String checkStudentNumber(int _studentNumber) {
-    CollectionReference studentNumberData =  Firestore.instance.collection('studentnumbers');
 
-    String studentNumberData(QuerySnapshot snapshot)
-    if (_studentNumber > 1 /*logic to find*/) {
-      String email = _studentNumber.toString() + '@email.com';
-      return email;
-    } else
-      return _studentNumber.toString();
-  }
 // sign out
 
   Future signOut() async {

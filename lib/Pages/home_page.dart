@@ -1,4 +1,5 @@
-import 'package:cardinal_plus/announcements.dart';
+import 'package:cardinal_plus/services/auth.dart';
+import 'package:cardinal_plus/tileinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:cardinal_plus/card_announcement.dart';
 
@@ -11,42 +12,50 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+final AuthService _auth = AuthService();
+
 class _HomePageState extends State<HomePage> {
-  List<Announcements> announcements = [
-    Announcements(
-        author: 'School of Information Technology',
-        message: 'Announcement 1',
-        date: '01/06/2020'),
-    Announcements(
-        author: 'Registrar',
-        message: 'Section clearing on 02/10/2020',
-        date: '02/07/2020'),
-    Announcements(
-        author: 'Customer Service',
-        message: 'We are open!',
-        date: '01/31/2020'),
+  List<TileInfo> announcements = [
+    TileInfo(
+        picture: 'assets/bbicon.png',
+        title: 'Blackboard',
+        description: 'Go to Blackboard'),
+    TileInfo(
+        picture: 'assets/mapualogo.png',
+        title: 'MyMapua',
+        description: 'Login to MyMapúa'),
+    TileInfo(
+        picture: 'assets/forms.png',
+        title: 'Forms',
+        description: 'Search Forms'),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Announcements'),
+        title: Text('Cardinal+'),
         backgroundColor: Colors.red[800],
+        actions: <Widget>[
+          FlatButton.icon(
+            textColor: Colors.white,
+            label: Text('Logout'),
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () async {
+              await _auth.signOut();
+            },
+          )
+        ],
       ),
-      body: Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-          image: AssetImage('assets/background.png'),
-          fit: BoxFit.fill,
-        )),
-        child: Column(
-          children: announcements
-              .map((announcement) => CardAnnouncement(
-                    announcements: announcement,
-                  ))
-              .toList(),
-        ),
+      body: GridView.count(
+        crossAxisCount: 2,
+        padding: EdgeInsets.all(16.0),
+        childAspectRatio: 8.0 / 9.0,
+        children: announcements
+            .map((announcement) => CardTiles(
+                  tileInfo: announcement,
+                ))
+            .toList(),
       ),
     );
   }

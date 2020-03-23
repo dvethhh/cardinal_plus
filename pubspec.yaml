@@ -55,6 +55,8 @@ flutter:
     - assets/background.png
     - assets/cardinaltwo.png
     - assets/bbicon.png
+    - assets/forms.png
+    - assets/mapualogo.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

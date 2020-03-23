@@ -1,5 +1,6 @@
-import 'package:cardinal_plus/Pages/blackboard.dart';
+import 'package:cardinal_plus/Pages/blackboardchoice.dart';
 import 'package:cardinal_plus/Pages/mymapua.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'forms_page.dart';
 import 'home_page.dart';
@@ -14,12 +15,12 @@ class __MyBottomNavigationState extends State<MyBottomNavigation> {
   int _currentIndex = 0;
   List<Widget> _pages = [
     HomePage(),
-    BlackBoard(),
+    BlackBoardChoice(),
     MyMapua(),
     Forms(),
     ProfilePage()
   ];
-
+  FirebaseUser user;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

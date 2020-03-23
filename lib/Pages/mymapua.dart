@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-
 import 'package:webview_flutter/webview_flutter.dart';
 
 class MyMapua extends StatefulWidget {
@@ -12,17 +10,14 @@ class _MyMapuaState extends State<MyMapua> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   title: Text("MyMapua"),
-      //         backgroundColor: Colors.red[800],
-      // ),
-      body: WebView(
-        javascriptMode: JavascriptMode.unrestricted,
-        initialUrl: "https://my.mapua.edu.ph/",
-        
-      )
-      
-    );
+        appBar: AppBar(
+          elevation: 0,
+          title: Text("MyMapúa"),
+          backgroundColor: Colors.red[800],
+        ),
+        body: WebView(
+          javascriptMode: JavascriptMode.unrestricted,
+          initialUrl: "https://my.mapua.edu.ph/",
+        ));
   }
 }
