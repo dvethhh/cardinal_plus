@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>122250334563-lkqugan0mte3s5lisfar7en2ln9rh7aj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.122250334563-lkqugan0mte3s5lisfar7en2ln9rh7aj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDl8HlAmVB0-5UQ7RIh__W409rSbgQ-1fQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>122250334563</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>cardinalplus</string>
+	<key>PROJECT_ID</key>
+	<string>cardinal-plus-d1a8b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cardinal-plus-d1a8b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:122250334563:ios:123da120e1d593d8a0c356</string>
+	<key>DATABASE_URL</key>
+	<string>https://cardinal-plus-d1a8b.firebaseio.com</string>
+</dict>
+</plist>

@@ -56,9 +56,11 @@ class _RegisterPageState extends State<RegisterPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           TextFormField(
+                            keyboardType: TextInputType.number,
                             inputFormatters: [
                               WhitelistingTextInputFormatter.digitsOnly
                             ],
+                            maxLengthEnforced: true,
                             maxLength: 10,
                             validator: (val) => val.length < 10
                                 ? 'Enter Correct Student Number'
@@ -83,6 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 setState(() => _name = val);
                               }),
                           TextFormField(
+                              keyboardType: TextInputType.emailAddress,
                               validator: (val) =>
                                   val.isEmpty ? 'Enter Information' : null,
                               decoration: const InputDecoration(
@@ -108,6 +111,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           RaisedButton(
                             onPressed: () async {
+                              userData = UserData(
+                                  email: _email,
+                                  studentNumber: _studentNumber,
+                                  name: _name);
                               if (_formkey.currentState.validate()) {
                                 dynamic result =
                                     await _auth.registerWithEmailAndPassword(

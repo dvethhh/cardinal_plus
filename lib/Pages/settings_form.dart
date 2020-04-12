@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class SettingsForm extends StatefulWidget {
+class RatingForm extends StatefulWidget {
   @override
-  _SettingsFormState createState() => _SettingsFormState();
+  _RatingFormState createState() => _RatingFormState();
 }
 
-class _SettingsFormState extends State<SettingsForm> {
+class _RatingFormState extends State<RatingForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> rating = ['1', '2', '3', '4', '5'];
 

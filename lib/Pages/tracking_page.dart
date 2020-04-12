@@ -1,9 +1,8 @@
+import 'package:cardinal_plus/Pages/forms_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cardinal_plus/card_tracking.dart';
 
 class TrackingPage extends StatefulWidget {
-  final Function toggleView;
-  TrackingPage({this.toggleView});
   @override
   _TrackingPageState createState() => _TrackingPageState();
 }
@@ -20,16 +19,20 @@ class _TrackingPageState extends State<TrackingPage> {
               color: Colors.white,
             ),
             label: Text(
-              'Tracking Page',
+              'Forms Page',
               style: TextStyle(color: Colors.white),
             ),
-            onPressed: () => widget.toggleView(),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Forms()),
+              );
+            },
           ),
         ],
         backgroundColor: Colors.red[800],
       ),
       body: Container(
-
         child: Column(
           children: <Widget>[
             SizedBox(height: 20),

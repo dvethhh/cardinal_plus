@@ -1,3 +1,4 @@
+import 'package:cardinal_plus/Pages/announcements.dart';
 import 'package:cardinal_plus/Pages/blackboardchoice.dart';
 import 'package:cardinal_plus/Pages/mymapua.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,7 +19,7 @@ class __MyBottomNavigationState extends State<MyBottomNavigation> {
     BlackBoardChoice(),
     MyMapua(),
     Forms(),
-    ProfilePage()
+    Announcements(),
   ];
   FirebaseUser user;
   @override
@@ -26,7 +27,6 @@ class __MyBottomNavigationState extends State<MyBottomNavigation> {
     return Scaffold(
         body: _pages[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
           currentIndex: _currentIndex,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -45,16 +45,13 @@ class __MyBottomNavigationState extends State<MyBottomNavigation> {
               icon: Icon(Icons.search),
               title: Text('Search Forms'),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              title: Text('Profile'),
-            ),
           ],
           onTap: (index) {
             setState(() {
               _currentIndex = index;
             });
           },
+          showUnselectedLabels: true,
           unselectedItemColor: Colors.black,
           selectedItemColor: Colors.red[800],
         ));

@@ -1,7 +1,13 @@
+import 'package:cardinal_plus/Pages/announcements.dart';
+import 'package:cardinal_plus/Pages/blackboard.dart';
+import 'package:cardinal_plus/Pages/blackboardchoice.dart';
+import 'package:cardinal_plus/Pages/mymapua.dart';
 import 'package:cardinal_plus/services/auth.dart';
 import 'package:cardinal_plus/tileinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:cardinal_plus/card_announcement.dart';
+
+import 'forms_page.dart';
 
 void main() => runApp(MaterialApp(
       home: HomePage(),
@@ -19,15 +25,22 @@ class _HomePageState extends State<HomePage> {
     TileInfo(
         picture: 'assets/bbicon.png',
         title: 'Blackboard',
-        description: 'Go to Blackboard'),
+        description: 'Go to Blackboard',
+        widget: BlackBoardChoice()),
     TileInfo(
         picture: 'assets/mapualogo.png',
         title: 'MyMapua',
-        description: 'Login to MyMapúa'),
+        description: 'Login to MyMapúa',
+        widget: MyMapua()),
     TileInfo(
         picture: 'assets/forms.png',
         title: 'Forms',
-        description: 'Search Forms'),
+        description: 'Search Forms',
+        widget: Forms()),
+    TileInfo(
+        picture: 'assets/announcements.png',
+        title: 'Announcements',
+        description: 'Check Announcements'),
   ];
 
   @override

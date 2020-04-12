@@ -1,3 +1,4 @@
+import 'package:cardinal_plus/Pages/forgotpassword.dart';
 import 'package:cardinal_plus/user.dart';
 import 'package:flutter/material.dart';
 import 'package:cardinal_plus/services/auth.dart';
@@ -19,6 +20,17 @@ class _SignInState extends State<SignIn> {
   String email = '';
   String password = '';
   String error = '', _studentNumber;
+
+  void _showForgotPassword() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+            child: ForgotPassword(),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +72,8 @@ class _SignInState extends State<SignIn> {
                     ),
                     SizedBox(height: 20.0),
                     TextFormField(
+                      maxLength: 10,
+                      keyboardType: TextInputType.number,
                       validator: (val) =>
                           val.isEmpty ? 'Enter Information' : null,
                       onChanged: (val) {
@@ -111,11 +125,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       FlatButton(
                         color: Colors.white,
-                        onPressed: () {
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text('Yay! A SnackBar!'),
-                          ));
-                        },
+                        onPressed: () => _showForgotPassword(),
                         child: Text('Forgot Password?'),
                       ),
                     ])

@@ -16,6 +16,7 @@ class _MyMapuaState extends State<MyMapua> {
           backgroundColor: Colors.red[800],
         ),
         body: WebView(
+          
           javascriptMode: JavascriptMode.unrestricted,
           initialUrl: "https://my.mapua.edu.ph/",
         ));
