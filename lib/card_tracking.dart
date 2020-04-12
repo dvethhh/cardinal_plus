@@ -4,13 +4,13 @@ import 'Pages/settings_form.dart';
 class CardTracking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void _showSettingsPanel() {
+    void _showActionPanel() {
       showModalBottomSheet(
           context: context,
           builder: (context) {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-              child: SettingsForm(),
+              child: RatingForm(),
             );
           });
     }
@@ -20,10 +20,10 @@ class CardTracking extends StatelessWidget {
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
         child: ListTile(
-          onTap: () => _showSettingsPanel(),
+          onTap: () => _showActionPanel(),
           trailing: Icon(
             Icons.rate_review,
-            color: Colors.blue,
+            color: Colors.yellow[600],
           ),
           title: Text(
             'name of form',
