@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'forms_page.dart';
 import 'home_page.dart';
-import 'profile_page.dart';
 
 class MyBottomNavigation extends StatefulWidget {
   @override

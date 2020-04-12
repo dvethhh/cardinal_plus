@@ -1,6 +1,6 @@
 class Transactions {
   String createdOn;
-  bool status;
+  String status;
   String transactionId;
   String remarks;
   String department;

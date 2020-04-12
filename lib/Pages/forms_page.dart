@@ -10,10 +10,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
-const String kTestString = 'Hello world!';
-FirebaseUser user;
-final CollectionReference transactions =
-    Firestore.instance.collection('transactions');
 String _fileName;
 var selectedDepartment, selectedForm;
 
@@ -23,13 +19,27 @@ class Forms extends StatefulWidget {
 }
 
 Future<void> createTransaction() async {
-  return await transactions.document(user.uid).setData({
+  final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  final userid = user.uid;
+  print(userid);
+  final CollectionReference transactions = Firestore.instance
+      .collection('transactions')
+      .document("$userid")
+      .collection('submittedforms');
+  DateTime now = DateTime.now();
+  now = DateTime(now.year, now.month, now.day, now.hour, now.minute);
+  return await transactions.document().setData({
     'department': selectedDepartment,
     'form': selectedForm,
-    'createdOn': DateTime.now(),
-    'transactionId': Timestamp.fromMicrosecondsSinceEpoch(5),
+    'createdOn': now.toString().substring(0, 16),
     'status': "Open",
   });
+}
+
+Future<String> getUserId() async {
+  final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  final String userid = user.uid;
+  return userid;
 }
 
 final Email email = Email(
@@ -67,6 +77,12 @@ void _getData() async {
   });
 }
 
+bool isDisabled = true;
+
+bool _checkForm() {
+  return null;
+}
+
 class _FormsState extends State<Forms> {
   @override
   Widget build(BuildContext context) {
@@ -82,13 +98,16 @@ class _FormsState extends State<Forms> {
               color: Colors.white,
             ),
             label: Text(
-              'Tracking Page',
+              'Submitted Forms',
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TrackingPage()),
+                MaterialPageRoute(
+                    builder: (context) => TrackingPage(
+                          userid: 'ySyGlewJbbNkfsffu8YXfPnjK973',
+                        )),
               );
             },
           ),
@@ -127,26 +146,24 @@ class _FormsState extends State<Forms> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           SizedBox(width: 50.0),
-                          Expanded(
-                            child: DropdownButton(
-                              items: departments,
-                              onChanged: (departmentValue) {
-                                selectedForm = null;
-                                final snackBar = SnackBar(
-                                  content: Text(
-                                    'Selected Department is $departmentValue',
-                                  ),
-                                );
-                                Scaffold.of(context).showSnackBar(snackBar);
-                                setState(() {
-                                  selectedDepartment = departmentValue;
-                                });
-                              },
-                              value: selectedDepartment,
-                              isExpanded: false,
-                              hint: new Text(
-                                "Choose Department",
-                              ),
+                          DropdownButton(
+                            items: departments,
+                            onChanged: (departmentValue) {
+                              selectedForm = null;
+                              final snackBar = SnackBar(
+                                content: Text(
+                                  'Selected Department is $departmentValue',
+                                ),
+                              );
+                              Scaffold.of(context).showSnackBar(snackBar);
+                              setState(() {
+                                selectedDepartment = departmentValue;
+                              });
+                            },
+                            value: selectedDepartment,
+                            isExpanded: false,
+                            hint: new Text(
+                              "Choose Department",
                             ),
                           ),
                         ],
@@ -220,20 +237,32 @@ class _FormsState extends State<Forms> {
                 height: 80.0,
               ),
               ButtonBar(
+                mainAxisSize: MainAxisSize.max,
+                alignment: MainAxisAlignment.center,
                 children: <Widget>[
                   FlatButton(
                     color: Colors.red[800],
                     onPressed: () {},
-                    child: Text('Upload Form',
-                        style: TextStyle(color: Colors.white)),
+                    child: Column(
+                      children: <Widget>[
+                        Icon(Icons.file_upload),
+                        Text('Upload Form',
+                            style: TextStyle(color: Colors.white)),
+                      ],
+                    ),
                   ),
                   FlatButton(
                     color: Colors.red[800],
                     onPressed: () {
-                      createTransaction();
+                      if (selectedDepartment == null || selectedForm == null)
+                        null;
+                      else
+                        createTransaction();
                     },
-                    child: Text('Send Form',
-                        style: TextStyle(color: Colors.white)),
+                    child: Column(children: <Widget>[
+                      Icon(Icons.send),
+                      Text('Send Form', style: TextStyle(color: Colors.white)),
+                    ]),
                   )
                 ],
               )

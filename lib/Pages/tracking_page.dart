@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:cardinal_plus/card_tracking.dart';
 
 class TrackingPage extends StatefulWidget {
+  final String userid;
+  TrackingPage({this.userid});
   @override
   _TrackingPageState createState() => _TrackingPageState();
 }
 
 class _TrackingPageState extends State<TrackingPage> {
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +39,7 @@ class _TrackingPageState extends State<TrackingPage> {
         child: Column(
           children: <Widget>[
             SizedBox(height: 20),
-            CardTracking(),
+            CardTracking(userid: 'ySyGlewJbbNkfsffu8YXfPnjK973',),
           ],
         ),
       ),

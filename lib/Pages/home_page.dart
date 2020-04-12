@@ -1,12 +1,9 @@
-import 'package:cardinal_plus/Pages/announcements.dart';
-import 'package:cardinal_plus/Pages/blackboard.dart';
 import 'package:cardinal_plus/Pages/blackboardchoice.dart';
 import 'package:cardinal_plus/Pages/mymapua.dart';
 import 'package:cardinal_plus/services/auth.dart';
 import 'package:cardinal_plus/tileinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:cardinal_plus/card_announcement.dart';
-
 import 'forms_page.dart';
 
 void main() => runApp(MaterialApp(
