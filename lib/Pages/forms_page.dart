@@ -1,6 +1,7 @@
-import 'package:cardinal_plus/Pages/formview.dart';
+
+
 import 'package:cardinal_plus/Pages/tracking_page.dart';
-import 'package:cardinal_plus/transactions.dart';
+import 'package:cardinal_plus/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,83 +10,107 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-
-String _fileName;
-var selectedDepartment, selectedForm;
+import 'package:provider/provider.dart';
+import 'package:file_picker/file_picker.dart';
 
 class Forms extends StatefulWidget {
   @override
   _FormsState createState() => _FormsState();
 }
 
-Future<void> createTransaction() async {
-  final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-  final userid = user.uid;
-  print(userid);
-  final CollectionReference transactions = Firestore.instance
-      .collection('transactions')
-      .document("$userid")
-      .collection('submittedforms');
-  DateTime now = DateTime.now();
-  now = DateTime(now.year, now.month, now.day, now.hour, now.minute);
-  return await transactions.document().setData({
-    'department': selectedDepartment,
-    'form': selectedForm,
-    'createdOn': now.toString().substring(0, 16),
-    'status': "Open",
-  });
-}
-
-Future<String> getUserId() async {
-  final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-  final String userid = user.uid;
-  return userid;
-}
-
-final Email email = Email(
-  body: 'Please see attached form.',
-  subject: '$selectedForm | ',
-  recipients: ['example@example.com'],
-  cc: ['cc@example.com'],
-  bcc: ['bcc@example.com'],
-  attachmentPaths: ['/path/to/attachment.zip'],
-  isHTML: false,
-);
-
-Future<Null> downloadFile(String fileName) async {
-  final Directory directory = await getExternalStorageDirectory();
-  final File file = File('${directory.path}/${fileName}');
-
-  final StorageReference ref = FirebaseStorage.instance.ref().child(fileName);
-  final StorageFileDownloadTask downloadTask = ref.writeToFile(file);
-
-  final int byteNumber = (await downloadTask.future).totalByteCount;
-
-  print(byteNumber);
-}
-
-Future<Null> uploadFile(String fileName) async {
-  final Directory directory = await getExternalStorageDirectory();
-}
-
-void _getData() async {
-  await Firestore.instance
-      .collection("department/$selectedDepartment/forms/$selectedForm/filename")
-      .getDocuments()
-      .then((QuerySnapshot snapshot) {
-    snapshot.documents.forEach((f) => print('${f.data}}'));
-  });
-}
-
-bool isDisabled = true;
-
-bool _checkForm() {
-  return null;
-}
-
 class _FormsState extends State<Forms> {
+  String _fileName, _emailRecepient;
+  var selectedDepartment, selectedForm;
+  bool downloading = false;
+
+  Future<void> createTransaction() async {
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final userid = user.uid;
+    print(userid);
+    final CollectionReference transactions = Firestore.instance
+        .collection('transactions')
+        .document("$userid")
+        .collection('submittedforms');
+    DateTime now = DateTime.now();
+    now = DateTime(now.year, now.month, now.day, now.hour, now.minute);
+    return await transactions.document().setData({
+      'department': selectedDepartment,
+      'form': selectedForm,
+      'createdOn': now.toString().substring(0, 16),
+      'status': "Open",
+    });
+  }
+
+  Future<String> getUserId() async {
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final String userid = user.uid;
+    return userid;
+  }
+
+  Future<void> _sendEmail() async {
+    final Directory directory = await getExternalStorageDirectory();
+    DocumentSnapshot snapshot = await Firestore.instance
+        .collection("department")
+        .document(selectedDepartment)
+        .get();
+    _emailRecepient = snapshot.data['email'];
+    final Email email = Email(
+      body: 'Please see attached form.',
+      subject: '$selectedForm | Sent From Cardinal+ Mobile App',
+      recipients: ['$_emailRecepient'],
+      attachmentPaths: ['${directory.path}/$_fileName'],
+      isHTML: false,
+    );
+    print(_emailRecepient);
+
+    return await FlutterEmailSender.send(email);
+  }
+
+  Future<Null> downloadFile(String fileName) async {
+    try {
+      final StorageReference ref =
+          FirebaseStorage.instance.ref().child(fileName);
+      final String url = await ref.getDownloadURL();
+      final Directory directory = await getExternalStorageDirectory();
+      final File tempFile = new File('${directory.path}/$fileName');
+      if (tempFile.existsSync()) {
+        await tempFile.delete();
+      }
+
+      await tempFile.create();
+      final StorageFileDownloadTask task = ref.writeToFile(tempFile);
+      final int byteCount = (await task.future).totalByteCount;
+
+      print(byteCount);
+      print(url);
+      print(directory.path);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<File> uploadFile() async {
+    File file = await FilePicker.getFile();
+    final Directory directory = await getApplicationDocumentsDirectory();
+    return new File('$directory.path/$file');
+  }
+
+  Future<String> _getFileName() async {
+    DocumentSnapshot snapshot = await Firestore.instance
+        .collection("department")
+        .document(selectedDepartment)
+        .collection('forms')
+        .document(selectedForm)
+        .get();
+    _fileName = snapshot.data['filename'];
+
+    print(_fileName);
+    return _fileName;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _user = Provider.of<User>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -104,10 +129,7 @@ class _FormsState extends State<Forms> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => TrackingPage(
-                          userid: 'ySyGlewJbbNkfsffu8YXfPnjK973',
-                        )),
+                MaterialPageRoute(builder: (context) => TrackingPage()),
               );
             },
           ),
@@ -143,7 +165,7 @@ class _FormsState extends State<Forms> {
                         );
                       }
                       return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(width: 50.0),
                           DropdownButton(
@@ -185,11 +207,16 @@ class _FormsState extends State<Forms> {
                     else {
                       List<DropdownMenuItem> forms = [];
                       for (int i = 0; i < snapshot.data.documents.length; i++) {
+                        String _formFormatted;
                         DocumentSnapshot snap = snapshot.data.documents[i];
+                        if (snap.documentID.length < 25)
+                          _formFormatted = snap.documentID;
+                        else
+                          _formFormatted = snap.documentID.substring(0, 20);
                         forms.add(
                           DropdownMenuItem(
                             child: Text(
-                              snap.documentID,
+                              _formFormatted,
                               style: TextStyle(color: Colors.red[800]),
                             ),
                             value: "${snap.documentID}",
@@ -202,7 +229,6 @@ class _FormsState extends State<Forms> {
                           DropdownButton(
                             items: forms,
                             onChanged: (formValue) {
-                              _getData();
                               final snackBar = SnackBar(
                                 content: Text(
                                   'Selected Form is $formValue',
@@ -211,6 +237,7 @@ class _FormsState extends State<Forms> {
                               Scaffold.of(context).showSnackBar(snackBar);
                               setState(() {
                                 selectedForm = formValue;
+                                _getFileName();
                               });
                             },
                             value: selectedForm,
@@ -224,25 +251,44 @@ class _FormsState extends State<Forms> {
                       );
                     }
                   }),
-              FlatButton(
-                  color: Colors.red[800],
-                  child:
-                      Text('Open Form', style: TextStyle(color: Colors.white)),
-                  onPressed: () async {
-                    await downloadFile('request_to_complete.pdf');
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (context) => FormView()));
-                  }),
               SizedBox(
-                height: 80.0,
+                height: 40.0,
               ),
               ButtonBar(
-                mainAxisSize: MainAxisSize.max,
+                buttonPadding: EdgeInsets.all(8),
+                buttonMinWidth: 150,
+                buttonHeight: 60,
+                mainAxisSize: MainAxisSize.min,
                 alignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  //download button
+                  Tooltip(
+                    message: 'Download Selected Form',
+                    child: FlatButton(
+                        shape: StadiumBorder(),
+                        color: Colors.blue[800],
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.cloud_download),
+                            Text('Download Form',
+                                style: TextStyle(color: Colors.white)),
+                          ],
+                        ),
+                        onPressed: () async {
+                          await downloadFile(_fileName);
+                          // Navigator.push(context,
+                          //     MaterialPageRoute(builder: (context) => FormView()));
+                        }),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
                   FlatButton(
-                    color: Colors.red[800],
-                    onPressed: () {},
+                    shape: StadiumBorder(),
+                    color: Colors.blue[800],
+                    onPressed: () {
+                      uploadFile();
+                    },
                     child: Column(
                       children: <Widget>[
                         Icon(Icons.file_upload),
@@ -251,13 +297,19 @@ class _FormsState extends State<Forms> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 16,
+                  ),
                   FlatButton(
-                    color: Colors.red[800],
+                    shape: StadiumBorder(),
+                    color: Colors.green[800],
                     onPressed: () {
                       if (selectedDepartment == null || selectedForm == null)
-                        null;
-                      else
+                        return null;
+                      else {
+                        _sendEmail();
                         createTransaction();
+                      }
                     },
                     child: Column(children: <Widget>[
                       Icon(Icons.send),
@@ -272,4 +324,7 @@ class _FormsState extends State<Forms> {
       ),
     );
   }
+
+  //Something Something code code
+
 }

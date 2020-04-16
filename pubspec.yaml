@@ -35,6 +35,12 @@ dependencies:
   path_provider: ^1.6.5
   flutter_email_sender: ^3.0.1
   url_launcher: ^5.4.2
+  flutter_launcher_icons: ^0.7.4
+  file_picker: ^1.6.2
+
+flutter_icons:
+  image_path: "assets/mapualogo.png"
+  android: true
 
 
 
