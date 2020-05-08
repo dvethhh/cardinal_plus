@@ -30,9 +30,9 @@ class CardTiles extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(tileInfo.title, style: theme.textTheme.title),
+                      Text(tileInfo.title, style: theme.textTheme.headline6),
                       SizedBox(height: 8.0),
-                      Text(tileInfo.description, style: theme.textTheme.body2),
+                      Text(tileInfo.description, style: theme.textTheme.bodyText1),
                     ],
                   ),
                 ),
