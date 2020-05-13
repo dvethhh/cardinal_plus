@@ -48,12 +48,9 @@ class _SendMessageState extends State<SendMessage> {
       final CollectionReference transactions = Firestore.instance
           .collection('transactions')
           .document(_user.uid)
-          .collection('submittedforms')
-          .document(widget.docid)
-          .collection('remarks');
-
-      return await transactions.document('studentMessage').setData({
-        'student': message,
+          .collection('submittedforms');
+      return await transactions.document(widget.docid).setData({
+        'studentremarks': message,
       });
     }
 

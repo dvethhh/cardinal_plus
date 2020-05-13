@@ -26,13 +26,11 @@ class _RatingFormState extends State<RatingForm> {
       final CollectionReference transactions = Firestore.instance
           .collection('transactions')
           .document(_user.uid)
-          .collection('submittedforms')
-          .document(widget.docid)
-          .collection('ratings');
+          .collection('submittedforms');
 
       return await transactions
-          .document('ratings')
-          .setData({'student': review, 'ratings': rating});
+          .document(widget.docid)
+          .setData({'review': review, 'ratings': rating});
     }
 
     return Form(

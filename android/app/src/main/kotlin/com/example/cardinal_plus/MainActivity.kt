@@ -1,4 +1,4 @@
-package com.example.cardinal_plus
+package com.mapua.cardinal_plus
 
 import android.os.Bundle
 

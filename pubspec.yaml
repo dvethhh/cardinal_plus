@@ -1,5 +1,5 @@
 name: cardinal_plus
-description: Cardinal+ - Student Services Mobile Application 
+description: Cardinal+ - Student Services Mobile Application
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -23,7 +23,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  firebase_auth: ^0.14.0+5
+  firebase_auth: ^0.16.0
   cloud_firestore: ^0.12.9+4
   provider: ^3.1.0
   flutter_spinkit: ^4.1.1
@@ -37,6 +37,8 @@ dependencies:
   url_launcher: ^5.4.2
   flutter_launcher_icons: ^0.7.4
   file_picker: ^1.6.2
+
+
 
 flutter_icons:
   image_path: "assets/mapualogo.png"
@@ -62,16 +64,11 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/profile.jpg
     - assets/mapua-banner.png
-    - assets/background.png
-    - assets/cardinaltwo.png
     - assets/bbicon.png
     - assets/forms.png
     - assets/mapualogo.png
     - assets/announcements.png
-    - assets/request_to_complete.pdf
-    - assets/application_for_diploma.pdf
     - assets/bbplaystore.png
   #  - images/a_dot_ham.jpeg
 

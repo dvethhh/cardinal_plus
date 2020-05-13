@@ -1,5 +1,3 @@
-
-
 import 'package:cardinal_plus/Pages/tracking_page.dart';
 import 'package:cardinal_plus/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,6 +10,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Forms extends StatefulWidget {
   @override
@@ -22,6 +21,15 @@ class _FormsState extends State<Forms> {
   String _fileName, _emailRecepient;
   var selectedDepartment, selectedForm;
   bool downloading = false;
+
+
+  Future launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceSafariVC: false, forceWebView: false);
+    } else {
+      print("Can't Launch $url");
+    }
+  }
 
   Future<void> createTransaction() async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -41,11 +49,6 @@ class _FormsState extends State<Forms> {
     });
   }
 
-  Future<String> getUserId() async {
-    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    final String userid = user.uid;
-    return userid;
-  }
 
   Future<void> _sendEmail() async {
     final Directory directory = await getExternalStorageDirectory();
@@ -71,19 +74,8 @@ class _FormsState extends State<Forms> {
       final StorageReference ref =
           FirebaseStorage.instance.ref().child(fileName);
       final String url = await ref.getDownloadURL();
-      final Directory directory = await getExternalStorageDirectory();
-      final File tempFile = new File('${directory.path}/$fileName');
-      if (tempFile.existsSync()) {
-        await tempFile.delete();
-      }
-
-      await tempFile.create();
-      final StorageFileDownloadTask task = ref.writeToFile(tempFile);
-      final int byteCount = (await task.future).totalByteCount;
-
-      print(byteCount);
+      launchURL(url);
       print(url);
-      print(directory.path);
     } catch (e) {
       print(e.toString());
     }
@@ -103,14 +95,12 @@ class _FormsState extends State<Forms> {
         .document(selectedForm)
         .get();
     _fileName = snapshot.data['filename'];
-
     print(_fileName);
     return _fileName;
   }
 
   @override
   Widget build(BuildContext context) {
-    final _user = Provider.of<User>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
